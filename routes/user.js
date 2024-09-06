@@ -6,22 +6,25 @@ const username = "aswin";
 const password = "aswin@123";
 
 user.get('/',(req,res)=>{
+    console.log(req.session.user);
+    
     if(req.session.user){
         res.render('home');
     }else{
         if(req.session.passwordWrong){
-            res.render('login',{msg:"Invalid credentials"});
+            res.render('login',{msg:"Invalid credentials!!"});
             req.session.passwordWrong = false;
         }else{
             //sendiing response when get request
             // res.send("HEllo world");
             res.render('login');
+            
         }
     }
 })
 
 user.post('/verify',(req,res)=>{
-    console.log(res.body);
+    console.log(req.body);
     
     if(req.body.username == username && req.body.password == password){
         req.session.user = req.body.username;
@@ -30,7 +33,7 @@ user.post('/verify',(req,res)=>{
         req.session.passwordWrong = true;
         res.redirect('/');
     }
-    // res.send("login successfully")
+    // res.send("login successfully");
 });
 
 user.get("/home",(req,res)=>{
@@ -45,6 +48,8 @@ user.get("/home",(req,res)=>{
         }
     }
 })
+ 
+
 
 // router for logout
 user.get('/logout',(req,res)=>{
